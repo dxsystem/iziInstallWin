@@ -76,6 +76,7 @@
         </div>
     </div>
 
+    <script src="verify.js"></script>
     <script>
         // Función para obtener parámetros de la URL
         function getUrlParams() {
@@ -89,19 +90,11 @@
         }
 
         // Función para verificar el pago
-        async function verifyPayment() {
+        async function checkPayment() {
             const params = getUrlParams();
             
             try {
-                const response = await fetch('verify.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(params)
-                });
-
-                const result = await response.json();
+                const result = await verifyPayment(params);
 
                 if (result.success) {
                     showSuccess();
@@ -132,7 +125,7 @@
         }
 
         // Iniciar verificación cuando la página cargue
-        window.onload = verifyPayment;
+        window.onload = checkPayment;
     </script>
 </body>
 </html> 

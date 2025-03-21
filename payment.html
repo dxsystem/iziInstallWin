@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>Pago - IziInstall</title>
+    <script src="https://static.micuentaweb.pe/static/js/krypton-client/V4.0/stable/kr-payment-form.min.js"></script>
+    <style>
+        body { 
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #252526;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .kr-embedded {
+            background-color: #2D2D30;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .kr-payment-button {
+            background: linear-gradient(135deg, #9B30FF, #FF1493) !important;
+            border: none !important;
+            padding: 12px 24px !important;
+            font-size: 16px !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+        }
+        .kr-payment-button:hover {
+            opacity: 0.9 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 15px rgba(155, 48, 255, 0.3) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class='kr-embedded'>
+        <div class='kr-pan'></div>
+        <div class='kr-expiry'></div>
+        <div class='kr-security-code'></div>
+        <button class='kr-payment-button'></button>
+    </div>
+
+    <script>
+        // Obtener parámetros de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        var KR = KR || {};
+        
+        KR.onLoad = function() {
+            console.log('KR cargado correctamente');
+            KR.setFormConfig({
+                formToken: null,
+                amount: urlParams.get('amount'),
+                currency: urlParams.get('currency'),
+                orderId: urlParams.get('orderId'),
+                'kr-language': urlParams.get('kr-language'),
+                'kr-public-key': urlParams.get('kr-public-key'),
+                'kr-post-url-success': 'https://dxsystem.github.io/iziInstallWin/verify.html',
+                'kr-post-url-refused': 'https://dxsystem.github.io/iziInstallWin/verify.html',
+                'kr-post-url-cancel': 'https://dxsystem.github.io/iziInstallWin/verify.html',
+                signature: urlParams.get('signature'),
+                timestamp: urlParams.get('timestamp'),
+                customer: {
+                    email: urlParams.get('customer_email'),
+                    billingDetails: {
+                        firstName: urlParams.get('customer_firstname'),
+                        lastName: urlParams.get('customer_lastname'),
+                        phoneNumber: urlParams.get('customer_phone'),
+                        email: urlParams.get('customer_email')
+                    }
+                },
+                style: {
+                    input: {
+                        color: '#FFFFFF',
+                        backgroundColor: '#3D3D40',
+                        borderColor: '#4F4F56',
+                        borderRadius: '4px',
+                        fontSize: '14px',
+                        padding: '10px'
+                    },
+                    label: {
+                        color: '#CCCCCC'
+                    },
+                    placeholder: {
+                        color: '#999999'
+                    }
+                }
+            }).then(function(v) {
+                console.log('Formulario inicializado correctamente:', v);
+                if (window.chrome && window.chrome.webview) {
+                    window.chrome.webview.postMessage(JSON.stringify({
+                        type: 'info',
+                        message: 'Formulario inicializado correctamente'
+                    }));
+                }
+            }).catch(function(error) {
+                console.error('Error al inicializar el formulario:', error);
+                if (window.chrome && window.chrome.webview) {
+                    window.chrome.webview.postMessage(JSON.stringify({
+                        type: 'error',
+                        message: error.message || 'Error desconocido al inicializar el formulario'
+                    }));
+                }
+            });
+        };
+
+        KR.onSubmit(function(event) {
+            console.log('Formulario enviado:', event);
+            if (window.chrome && window.chrome.webview) {
+                window.chrome.webview.postMessage(JSON.stringify({
+                    type: 'submit',
+                    data: event
+                }));
+            }
+        });
+
+        KR.onError(function(event) {
+            console.error('Error en el formulario:', event);
+            if (window.chrome && window.chrome.webview) {
+                window.chrome.webview.postMessage(JSON.stringify({
+                    type: 'error',
+                    message: event.errorMessage || 'Error desconocido en el formulario'
+                }));
+            }
+        });
+    </script>
+</body>
+</html> 

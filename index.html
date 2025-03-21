@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procesando Pago - InstallWin#</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #1E1E1E;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+        }
+        .status {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .message {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #CCCCCC;
+        }
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #3F3F46;
+            border-top: 5px solid #9B30FF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 2rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .success {
+            color: #4CAF50;
+        }
+        .error {
+            color: #E74C3C;
+        }
+        .button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, #9B30FF, #FF1493);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(155, 48, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loader" class="loader"></div>
+        <div id="status" class="status">Procesando pago...</div>
+        <div id="message" class="message">Por favor, espere mientras verificamos su pago.</div>
+        <div id="action" style="display: none;">
+            <a href="installwin://" class="button">Volver a InstallWin#</a>
+        </div>
+    </div>
+
+    <script>
+        // Función para obtener parámetros de la URL
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                kr_hash: params.get('kr-hash'),
+                kr_hash_algorithm: params.get('kr-hash-algorithm'),
+                kr_answer: params.get('kr-answer'),
+                kr_hash_key: params.get('kr-hash-key')
+            };
+        }
+
+        // Función para verificar el pago
+        async function verifyPayment() {
+            const params = getUrlParams();
+            
+            try {
+                const response = await fetch('verify.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(params)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showSuccess();
+                } else {
+                    showError(result.message || 'Error al procesar el pago');
+                }
+            } catch (error) {
+                showError('Error al verificar el pago');
+            }
+        }
+
+        // Función para mostrar éxito
+        function showSuccess() {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('status').innerHTML = '✅ ¡Pago exitoso!';
+            document.getElementById('status').classList.add('success');
+            document.getElementById('message').innerHTML = 'Su suscripción ha sido actualizada correctamente.';
+            document.getElementById('action').style.display = 'block';
+        }
+
+        // Función para mostrar error
+        function showError(message) {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('status').innerHTML = '❌ Error';
+            document.getElementById('status').classList.add('error');
+            document.getElementById('message').innerHTML = message;
+            document.getElementById('action').style.display = 'block';
+        }
+
+        // Iniciar verificación cuando la página cargue
+        window.onload = verifyPayment;
+    </script>
+</body>
+</html> 

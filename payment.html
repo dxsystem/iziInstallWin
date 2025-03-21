@@ -34,6 +34,15 @@
             transform: translateY(-2px) !important;
             box-shadow: 0 4px 15px rgba(155, 48, 255, 0.3) !important;
         }
+        #debug {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #1E1E1E;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -43,16 +52,28 @@
         <div class='kr-security-code'></div>
         <button class='kr-payment-button'></button>
     </div>
+    <div id="debug"></div>
 
     <script>
+        // Función para mostrar logs
+        function log(message, type = 'info') {
+            console.log(message);
+            const debug = document.getElementById('debug');
+            debug.style.display = 'block';
+            const color = type === 'error' ? '#FF4444' : '#44FF44';
+            debug.innerHTML += `<div style="color: ${color}">[${type.toUpperCase()}] ${JSON.stringify(message, null, 2)}</div>`;
+        }
+
         // Obtener parámetros de la URL
         const urlParams = new URLSearchParams(window.location.search);
+        log('Parámetros recibidos:', 'info');
+        log(Object.fromEntries(urlParams));
         
         var KR = KR || {};
         
         KR.onLoad = function() {
-            console.log('KR cargado correctamente');
-            KR.setFormConfig({
+            log('KR cargado correctamente');
+            const config = {
                 formToken: null,
                 amount: urlParams.get('amount'),
                 currency: urlParams.get('currency'),
@@ -72,25 +93,15 @@
                         phoneNumber: urlParams.get('customer_phone'),
                         email: urlParams.get('customer_email')
                     }
-                },
-                style: {
-                    input: {
-                        color: '#FFFFFF',
-                        backgroundColor: '#3D3D40',
-                        borderColor: '#4F4F56',
-                        borderRadius: '4px',
-                        fontSize: '14px',
-                        padding: '10px'
-                    },
-                    label: {
-                        color: '#CCCCCC'
-                    },
-                    placeholder: {
-                        color: '#999999'
-                    }
                 }
-            }).then(function(v) {
-                console.log('Formulario inicializado correctamente:', v);
+            };
+
+            log('Configuración del formulario:', 'info');
+            log(config);
+
+            KR.setFormConfig(config).then(function(v) {
+                log('Formulario inicializado correctamente:', 'info');
+                log(v);
                 if (window.chrome && window.chrome.webview) {
                     window.chrome.webview.postMessage(JSON.stringify({
                         type: 'info',
@@ -98,7 +109,8 @@
                     }));
                 }
             }).catch(function(error) {
-                console.error('Error al inicializar el formulario:', error);
+                log('Error al inicializar el formulario:', 'error');
+                log(error);
                 if (window.chrome && window.chrome.webview) {
                     window.chrome.webview.postMessage(JSON.stringify({
                         type: 'error',
@@ -109,7 +121,8 @@
         };
 
         KR.onSubmit(function(event) {
-            console.log('Formulario enviado:', event);
+            log('Formulario enviado:', 'info');
+            log(event);
             if (window.chrome && window.chrome.webview) {
                 window.chrome.webview.postMessage(JSON.stringify({
                     type: 'submit',
@@ -119,7 +132,8 @@
         });
 
         KR.onError(function(event) {
-            console.error('Error en el formulario:', event);
+            log('Error en el formulario:', 'error');
+            log(event);
             if (window.chrome && window.chrome.webview) {
                 window.chrome.webview.postMessage(JSON.stringify({
                     type: 'error',

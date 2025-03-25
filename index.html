@@ -3,129 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Procesando Pago - InstallWin#</title>
+    <title>IziInstall - Planes de Suscripción</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #1E1E1E;
-            color: white;
+        :root {
+            --primary-gradient: linear-gradient(135deg, #9B30FF, #FF1493);
+            --secondary-color: #2D2D30;
+            --background-color: #252526;
+            --text-color: #FFFFFF;
+            --accent-color: #4CAF50;
+            --hover-color: rgba(155, 48, 255, 0.1);
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
             min-height: 100vh;
-        }
-        .container {
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 2rem;
-            max-width: 600px;
-            width: 90%;
         }
-        .status {
-            font-size: 2rem;
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            max-width: 800px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .header p {
+            color: #CCC;
+            font-size: 1.1rem;
+        }
+
+        .plans-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            padding: 1rem;
+        }
+
+        .plan-card {
+            background-color: var(--secondary-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .plan-card.popular::before {
+            content: "Más Popular";
+            position: absolute;
+            top: 1.5rem;
+            right: -4rem;
+            background: var(--primary-gradient);
+            padding: 0.5rem 4rem;
+            transform: rotate(45deg);
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .plan-type {
+            font-size: 1.5rem;
+            font-weight: bold;
             margin-bottom: 1rem;
         }
-        .message {
+
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .plan-price .currency {
             font-size: 1.2rem;
-            margin-bottom: 2rem;
-            color: #CCCCCC;
+            vertical-align: super;
         }
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #3F3F46;
-            border-top: 5px solid #9B30FF;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 2rem;
+
+        .plan-price .period {
+            font-size: 1rem;
+            color: #AAA;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #888;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
         }
-        .success {
-            color: #4CAF50;
+
+        .savings {
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
         }
-        .error {
-            color: #E74C3C;
+
+        .features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
         }
-        .button {
-            display: inline-block;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            text-decoration: none;
+
+        .features li {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .features li::before {
+            content: "✓";
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+        }
+
+        .select-plan {
+            background: var(--primary-gradient);
             color: white;
-            background: linear-gradient(135deg, #9B30FF, #FF1493);
+            border: none;
+            padding: 1rem 2rem;
             border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
             transition: all 0.3s ease;
         }
-        .button:hover {
+
+        .select-plan:hover {
+            opacity: 0.9;
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(155, 48, 255, 0.3);
+        }
+
+        .guarantee {
+            margin-top: 4rem;
+            text-align: center;
+            color: #CCC;
+        }
+
+        .guarantee i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        @media (max-width: 768px) {
+            .plans-container {
+                grid-template-columns: 1fr;
+                padding: 0.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .plan-card {
+                margin-bottom: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div id="loader" class="loader"></div>
-        <div id="status" class="status">Procesando pago...</div>
-        <div id="message" class="message">Por favor, espere mientras verificamos su pago.</div>
-        <div id="action" style="display: none;">
-            <a href="installwin://" class="button">Volver a InstallWin#</a>
+    <div class="header">
+        <h1>Planes de Suscripción IziInstall</h1>
+        <p>Elige el plan que mejor se adapte a tus necesidades y comienza a disfrutar de todas las funcionalidades de IziInstall.</p>
+    </div>
+
+    <div class="plans-container">
+        <!-- Plan PRO -->
+        <div class="plan-card">
+            <div class="plan-type">PRO</div>
+            <div class="original-price"><span class="currency">$</span>10</div>
+            <div class="plan-price">
+                <span class="currency">$</span>5
+                <span class="period">/mes</span>
+            </div>
+            <div class="savings">✓ Ahorra 50% con este plan</div>
+            <ul class="features">
+                <li>Acceso a todas las funciones básicas</li>
+                <li>Soporte por correo electrónico</li>
+                <li>Actualizaciones mensuales</li>
+                <li>1 usuario incluido</li>
+            </ul>
+            <button class="select-plan" onclick="selectPlan('PRO', 'mensual', 5)">
+                Seleccionar Plan PRO
+            </button>
+        </div>
+
+        <!-- Plan PRO Semestral -->
+        <div class="plan-card">
+            <div class="plan-type">PRO SEMESTRAL</div>
+            <div class="original-price"><span class="currency">$</span>30</div>
+            <div class="plan-price">
+                <span class="currency">$</span>15
+                <span class="period">/6 meses</span>
+            </div>
+            <div class="savings">✓ Ahorra 50% con este plan</div>
+            <ul class="features">
+                <li>Todas las características del plan PRO</li>
+                <li>Soporte prioritario</li>
+                <li>Acceso anticipado a nuevas funciones</li>
+                <li>2 usuarios incluidos</li>
+            </ul>
+            <button class="select-plan" onclick="selectPlan('PRO', 'semestral', 15)">
+                Seleccionar Plan Semestral
+            </button>
+        </div>
+
+        <!-- Plan PRO Anual -->
+        <div class="plan-card popular">
+            <div class="plan-type">PRO ANUAL</div>
+            <div class="original-price"><span class="currency">$</span>40</div>
+            <div class="plan-price">
+                <span class="currency">$</span>20
+                <span class="period">/año</span>
+            </div>
+            <div class="savings">✓ Ahorra 50% con este plan</div>
+            <ul class="features">
+                <li>Todas las características del plan PRO</li>
+                <li>Soporte prioritario 24/7</li>
+                <li>Acceso anticipado a nuevas funciones</li>
+                <li>3 usuarios incluidos</li>
+                <li>Capacitación personalizada</li>
+            </ul>
+            <button class="select-plan" onclick="selectPlan('PRO', 'anual', 20)">
+                Seleccionar Plan Anual
+            </button>
         </div>
     </div>
 
-    <script src="verify.js"></script>
+    <div class="guarantee">
+        <i class="fas fa-shield-alt"></i>
+        <p>Garantía de devolución de 30 días. Sin compromisos.</p>
+    </div>
+
     <script>
-        // Función para obtener parámetros de la URL
-        function getUrlParams() {
-            const params = new URLSearchParams(window.location.search);
-            return {
-                kr_hash: params.get('kr-hash'),
-                kr_hash_algorithm: params.get('kr-hash-algorithm'),
-                kr_answer: params.get('kr-answer'),
-                kr_hash_key: params.get('kr-hash-key')
-            };
-        }
-
-        // Función para verificar el pago
-        async function checkPayment() {
-            const params = getUrlParams();
+        function selectPlan(type, duration, amount) {
+            // Obtener timestamp actual
+            const timestamp = Date.now().toString();
             
-            try {
-                const result = await verifyPayment(params);
+            // Construir los parámetros para la URL
+            const params = new URLSearchParams({
+                amount: amount.toString(),
+                currency: 'USD',
+                orderId: `SUB_${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}_${Math.random().toString(36).substr(2, 8)}`,
+                'kr-language': 'es-ES',
+                'kr-public-key': '13683161:testpublickey_isrS6O7ui98CNj6o6rSgNhJEDNrDKjM56zvfgJFOs1Xzc',
+                timestamp: timestamp,
+                customer_email: '',  // Se llenará en la aplicación
+                customer_firstname: '',
+                customer_lastname: '',
+                customer_phone: ''
+            });
 
-                if (result.success) {
-                    showSuccess();
-                } else {
-                    showError(result.message || 'Error al procesar el pago');
-                }
-            } catch (error) {
-                showError('Error al verificar el pago');
-            }
+            // Redirigir a la página de pago
+            window.location.href = `payment.html?${params.toString()}`;
         }
-
-        // Función para mostrar éxito
-        function showSuccess() {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('status').innerHTML = '✅ ¡Pago exitoso!';
-            document.getElementById('status').classList.add('success');
-            document.getElementById('message').innerHTML = 'Su suscripción ha sido actualizada correctamente.';
-            document.getElementById('action').style.display = 'block';
-        }
-
-        // Función para mostrar error
-        function showError(message) {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('status').innerHTML = '❌ Error';
-            document.getElementById('status').classList.add('error');
-            document.getElementById('message').innerHTML = message;
-            document.getElementById('action').style.display = 'block';
-        }
-
-        // Iniciar verificación cuando la página cargue
-        window.onload = checkPayment;
     </script>
 </body>
 </html> 

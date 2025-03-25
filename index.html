@@ -192,6 +192,127 @@
                 margin-bottom: 1rem;
             }
         }
+
+        .plans-section {
+            margin-bottom: 4rem;
+        }
+
+        .plans-section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .elite-card {
+            background: linear-gradient(145deg, rgba(43, 43, 46, 0.9), rgba(35, 35, 38, 0.95));
+            box-shadow: 0 8px 32px 0 rgba(155, 48, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .elite-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(155, 48, 255, 0.2),
+                       0 0 10px rgba(255, 215, 0, 0.1);
+        }
+
+        .elite-card .plan-type {
+            background: linear-gradient(135deg, #FFD700, #9B30FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+        }
+
+        .elite-card .select-plan {
+            background: linear-gradient(135deg, #FFD700, #9B30FF);
+            border: none;
+            padding: 1.2rem 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .elite-card .select-plan:hover {
+            box-shadow: 0 8px 20px rgba(155, 48, 255, 0.3),
+                       0 0 15px rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .elite-badge::before {
+            content: "ELITE";
+            position: absolute;
+            top: 1.5rem;
+            right: -4rem;
+            background: linear-gradient(135deg, #FFD700, #9B30FF);
+            padding: 0.5rem 4rem;
+            transform: rotate(45deg);
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(155, 48, 255, 0.3);
+            animation: glow 2s infinite alternate;
+        }
+
+        .elite-card .features li::before {
+            background: linear-gradient(135deg, #FFD700, #9B30FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: bold;
+        }
+
+        .elite-card .plan-price {
+            font-size: 3rem;
+            margin: 1.5rem 0;
+            background: linear-gradient(135deg, #FFD700, #9B30FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .elite-card .savings {
+            color: #FFD700;
+            font-weight: 500;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.5),
+                           0 0 20px rgba(155, 48, 255, 0.3);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.7),
+                           0 0 40px rgba(155, 48, 255, 0.5);
+            }
+        }
+
+        .plans-section-title.elite {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 4rem 0 3rem;
+            text-align: center;
+            background: linear-gradient(135deg, #FFD700, #9B30FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(155, 48, 255, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -200,66 +321,146 @@
         <p>Elige el plan que mejor se adapte a tus necesidades y comienza a disfrutar de todas las funcionalidades de IziInstall.</p>
     </div>
 
-    <div class="plans-container">
-        <!-- Plan PRO -->
-        <div class="plan-card">
-            <div class="plan-type">PRO</div>
-            <div class="original-price"><span class="currency">$</span>10</div>
-            <div class="plan-price">
-                <span class="currency">$</span>5
-                <span class="period">/mes</span>
+    <!-- Planes PRO -->
+    <div class="plans-section">
+        <h2 class="plans-section-title">Planes PRO</h2>
+        <div class="plans-container">
+            <!-- Plan PRO Mensual -->
+            <div class="plan-card">
+                <div class="plan-type">PRO</div>
+                <div class="original-price"><span class="currency">$</span>10</div>
+                <div class="plan-price">
+                    <span class="currency">$</span>5
+                    <span class="period">/mes</span>
+                </div>
+                <div class="savings">✓ Ahorra 50% con este plan</div>
+                <ul class="features">
+                    <li>Acceso a todas las funciones básicas</li>
+                    <li>Soporte por correo electrónico</li>
+                    <li>Actualizaciones mensuales</li>
+                    <li>1 usuario incluido</li>
+                </ul>
+                <button class="select-plan" onclick="selectPlan('PRO', 'mensual', 5)">
+                    Seleccionar Plan PRO Mensual
+                </button>
             </div>
-            <div class="savings">✓ Ahorra 50% con este plan</div>
-            <ul class="features">
-                <li>Acceso a todas las funciones básicas</li>
-                <li>Soporte por correo electrónico</li>
-                <li>Actualizaciones mensuales</li>
-                <li>1 usuario incluido</li>
-            </ul>
-            <button class="select-plan" onclick="selectPlan('PRO', 'mensual', 5)">
-                Seleccionar Plan PRO
-            </button>
-        </div>
 
-        <!-- Plan PRO Semestral -->
-        <div class="plan-card">
-            <div class="plan-type">PRO SEMESTRAL</div>
-            <div class="original-price"><span class="currency">$</span>30</div>
-            <div class="plan-price">
-                <span class="currency">$</span>15
-                <span class="period">/6 meses</span>
+            <!-- Plan PRO Semestral -->
+            <div class="plan-card">
+                <div class="plan-type">PRO SEMESTRAL</div>
+                <div class="original-price"><span class="currency">$</span>30</div>
+                <div class="plan-price">
+                    <span class="currency">$</span>15
+                    <span class="period">/6 meses</span>
+                </div>
+                <div class="savings">✓ Ahorra 50% con este plan</div>
+                <ul class="features">
+                    <li>Todas las características del plan PRO</li>
+                    <li>Soporte prioritario</li>
+                    <li>Acceso anticipado a nuevas funciones</li>
+                    <li>2 usuarios incluidos</li>
+                </ul>
+                <button class="select-plan" onclick="selectPlan('PRO', 'semestral', 15)">
+                    Seleccionar Plan PRO Semestral
+                </button>
             </div>
-            <div class="savings">✓ Ahorra 50% con este plan</div>
-            <ul class="features">
-                <li>Todas las características del plan PRO</li>
-                <li>Soporte prioritario</li>
-                <li>Acceso anticipado a nuevas funciones</li>
-                <li>2 usuarios incluidos</li>
-            </ul>
-            <button class="select-plan" onclick="selectPlan('PRO', 'semestral', 15)">
-                Seleccionar Plan Semestral
-            </button>
-        </div>
 
-        <!-- Plan PRO Anual -->
-        <div class="plan-card popular">
-            <div class="plan-type">PRO ANUAL</div>
-            <div class="original-price"><span class="currency">$</span>40</div>
-            <div class="plan-price">
-                <span class="currency">$</span>20
-                <span class="period">/año</span>
+            <!-- Plan PRO Anual -->
+            <div class="plan-card popular">
+                <div class="plan-type">PRO ANUAL</div>
+                <div class="original-price"><span class="currency">$</span>40</div>
+                <div class="plan-price">
+                    <span class="currency">$</span>20
+                    <span class="period">/año</span>
+                </div>
+                <div class="savings">✓ Ahorra 50% con este plan</div>
+                <ul class="features">
+                    <li>Todas las características del plan PRO</li>
+                    <li>Soporte prioritario 24/7</li>
+                    <li>Acceso anticipado a nuevas funciones</li>
+                    <li>3 usuarios incluidos</li>
+                    <li>Capacitación personalizada</li>
+                </ul>
+                <button class="select-plan" onclick="selectPlan('PRO', 'anual', 20)">
+                    Seleccionar Plan PRO Anual
+                </button>
             </div>
-            <div class="savings">✓ Ahorra 50% con este plan</div>
-            <ul class="features">
-                <li>Todas las características del plan PRO</li>
-                <li>Soporte prioritario 24/7</li>
-                <li>Acceso anticipado a nuevas funciones</li>
-                <li>3 usuarios incluidos</li>
-                <li>Capacitación personalizada</li>
-            </ul>
-            <button class="select-plan" onclick="selectPlan('PRO', 'anual', 20)">
-                Seleccionar Plan Anual
-            </button>
+        </div>
+    </div>
+
+    <!-- Planes ELITE -->
+    <div class="plans-section">
+        <h2 class="plans-section-title elite">Planes ELITE (+350 apps)</h2>
+        <div class="plans-container">
+            <!-- Plan ELITE Mensual -->
+            <div class="plan-card elite-card">
+                <div class="plan-type">ELITE</div>
+                <div class="original-price"><span class="currency">$</span>14</div>
+                <div class="plan-price">
+                    <span class="currency">$</span>7
+                    <span class="period">/mes</span>
+                </div>
+                <div class="savings">✓ Ahorra 50% con este plan</div>
+                <ul class="features">
+                    <li>Acceso a +350 aplicaciones</li>
+                    <li>Soporte VIP 24/7</li>
+                    <li>Actualizaciones semanales</li>
+                    <li>5 usuarios incluidos</li>
+                    <li>API de integración</li>
+                    <li>Personalización básica</li>
+                </ul>
+                <button class="select-plan" onclick="selectPlan('ELITE', 'mensual', 7)">
+                    Seleccionar Plan ELITE Mensual
+                </button>
+            </div>
+
+            <!-- Plan ELITE Semestral -->
+            <div class="plan-card elite-card">
+                <div class="plan-type">ELITE SEMESTRAL</div>
+                <div class="original-price"><span class="currency">$</span>34</div>
+                <div class="plan-price">
+                    <span class="currency">$</span>17
+                    <span class="period">/6 meses</span>
+                </div>
+                <div class="savings">✓ Ahorra 50% con este plan</div>
+                <ul class="features">
+                    <li>Acceso a +350 aplicaciones</li>
+                    <li>Soporte VIP 24/7 prioritario</li>
+                    <li>Actualizaciones prioritarias</li>
+                    <li>10 usuarios incluidos</li>
+                    <li>API de integración avanzada</li>
+                    <li>Personalización avanzada</li>
+                    <li>Capacitación mensual</li>
+                </ul>
+                <button class="select-plan" onclick="selectPlan('ELITE', 'semestral', 17)">
+                    Seleccionar Plan ELITE Semestral
+                </button>
+            </div>
+
+            <!-- Plan ELITE Anual -->
+            <div class="plan-card elite-card elite-badge">
+                <div class="plan-type">ELITE ANUAL</div>
+                <div class="original-price"><span class="currency">$</span>44</div>
+                <div class="plan-price">
+                    <span class="currency">$</span>22
+                    <span class="period">/año</span>
+                </div>
+                <div class="savings">✓ Ahorra 50% con este plan</div>
+                <ul class="features">
+                    <li>Acceso a +350 aplicaciones</li>
+                    <li>Soporte VIP 24/7 dedicado</li>
+                    <li>Actualizaciones inmediatas</li>
+                    <li>20 usuarios incluidos</li>
+                    <li>API de integración empresarial</li>
+                    <li>Personalización total</li>
+                    <li>Capacitación ilimitada</li>
+                    <li>Infraestructura dedicada</li>
+                    <li>Panel de administración</li>
+                </ul>
+                <button class="select-plan" onclick="selectPlan('ELITE', 'anual', 22)">
+                    Seleccionar Plan ELITE Anual
+                </button>
+            </div>
         </div>
     </div>
 
